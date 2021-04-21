@@ -3,9 +3,11 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const { writeFile } = require('fs').promises;
 
-const [, , query] = process.argv;
+const [, , query, maxResults = 5] = process.argv;
+const filePath = __dirname;
 
-if (!query) throw new Error('Error: query argument required. Example: "tennis".');
+if (!query)
+  throw new Error('Error: query argument required. Example: "tennis".');
 
 // TODO: make city and state dynamic via inputs
 const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&radius=50&userFreeform=Austin%2C+TX&mcId=z73301&mcName=Austin%2C+TX&sort=recommended&eventFilter=all`;
@@ -17,15 +19,45 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     html = await res.text();
   } catch (error) {
     /* eslint-disable-next-line no-console */
-    console.error(`Failed to retrieve recipe: ${error}.`);
+    console.error(`Failed to retrieve meetups: ${error}.`);
     process.exit(1);
   }
 
   const $ = cheerio.load(html);
+  let linksArr = [];
+  let mainText = '';
 
   const links = $('.groupCard--photo');
-  links.each(async (i, link) => {
+  links.each((i, link) => {
     const { href } = link.attribs;
-  })
-}
-)()
+    linksArr.push(href);
+  });
+
+  for (const link of linksArr.slice(0, maxResults)) {
+    let _html;
+    try {
+      const res = await fetch(link);
+      _html = await res.text();
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.error(`Failed to retrieve meetup page: ${error}.`);
+      process.exit(1);
+    }
+
+    const _$ = cheerio.load(_html);
+    const title = _$('h1 a').text();
+    const description = _$('.group-description')
+      .text()
+      .split(' ')
+      .slice(0, 250)
+      .join(' ');
+
+    mainText += `
+        ${title}
+        ${description}
+        \n
+      `;
+  }
+
+  await writeFile(`${filePath}/${query}.txt`, mainText);
+})();
