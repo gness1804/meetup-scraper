@@ -5,10 +5,17 @@
   "main": "index.js",
   "author": "Graham Nessler",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint .",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write ."
+  },
   "dependencies": {
     "cheerio": "^1.0.0-rc.6",
     "dotenv": "^8.2.0",
     "eslint": "^7.24.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "prettier": "^2.2.1"
   }
 }

@@ -26,7 +26,7 @@ module.exports = {
     // 'plugin:react/recommended',
   ],
   rules: {
-    'no-console': 'warn',
+    'no-console': 'error',
     // the two below are only if using TypeScript
     // '@typescript-eslint/ban-types': 'warn',
     // '@typescript-eslint/no-unused-vars': 'error',
