@@ -49,7 +49,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     const description = _$('.group-description')
       .text()
       .split(' ')
-      .slice(0, 250)
+      .slice(0, 150)
       .join(' ');
 
     mainText += `
@@ -59,5 +59,9 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       `;
   }
 
-  await writeFile(`${filePath}/${query}.txt`, mainText);
+  const fileName = `${filePath}/${query}.txt`;
+
+  await writeFile(fileName, mainText);
+  //eslint-disable-next-line no-console
+  console.info(`Successfully created ${fileName}.`);
 })();
