@@ -4,5 +4,11 @@
   "description": "A scraper to find good Meetups.",
   "main": "index.js",
   "author": "Graham Nessler",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.6",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.24.0",
+    "node-fetch": "^2.6.1"
+  }
 }
