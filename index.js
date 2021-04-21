@@ -46,11 +46,11 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
     const _$ = cheerio.load(_html);
     const title = _$('h1 a').text();
-    const description = _$('.group-description')
-      .text()
-      .split(' ')
-      .slice(0, 150)
-      .join(' ');
+    const descriptionArr = _$('.group-description').text().split(' ');
+    const maxLen = 150;
+    const description = `${descriptionArr.slice(0, maxLen).join(' ')}${
+      descriptionArr.length > maxLen ? '...' : ''
+    }`;
 
     mainText += `
         ${title}
