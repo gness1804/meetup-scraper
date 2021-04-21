@@ -1,0 +1,8 @@
+{
+  "name": "meetup-scraper",
+  "version": "1.0.0",
+  "description": "A scraper to find good Meetups.",
+  "main": "index.js",
+  "author": "Graham Nessler",
+  "license": "MIT"
+}
