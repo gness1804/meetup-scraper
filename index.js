@@ -1,10 +1,11 @@
 require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
+const path = require('path');
 const { writeFile } = require('fs').promises;
 
 const [, , query, maxResults = 5] = process.argv;
-const filePath = __dirname;
+const filePath = path.resolve(__dirname, './data');
 
 if (!query)
   throw new Error('Error: query argument required. Example: "tennis".');
@@ -25,7 +26,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   const $ = cheerio.load(html);
   let linksArr = [];
-  let mainText = '';
+  const res = [];
 
   const links = $('.groupCard--photo');
   links.each((i, link) => {
@@ -46,22 +47,30 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
     const _$ = cheerio.load(_html);
     const title = _$('h1 a').text();
+
+    const upcomingEventsCount =
+      $('.groupHome-eventsList-upcomingEvents .eventCard--link').length + 1;
+    const pastEventsCount =
+      $('.groupHome-eventsList-pastEvents .eventCard--link').length + 1;
+
     const descriptionArr = _$('.group-description').text().split(' ');
     const maxLen = 150;
     const description = `${descriptionArr.slice(0, maxLen).join(' ')}${
       descriptionArr.length > maxLen ? '...' : ''
     }`;
-
-    mainText += `
-        ${title}
-        ${description}
-        \n
-      `;
+    // const mostRecentPastEvent = $('.groupHome-eventsList-pastEvents time .eventTimeDisplay-startDate span').text()
+    // console.log('mostRecentPastEvent:', mostRecentPastEvent);
+    res.push({
+      title,
+      'Upcoming Events': upcomingEventsCount,
+      'Past Events': pastEventsCount,
+      description,
+    });
   }
 
-  const fileName = `${filePath}/${query}.txt`;
+  const fileName = `${filePath}/${query}.json`;
 
-  await writeFile(fileName, mainText);
+  await writeFile(fileName, JSON.stringify(res));
   //eslint-disable-next-line no-console
   console.info(`Successfully created ${fileName}.`);
 })();
