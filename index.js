@@ -47,7 +47,10 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
     const _$ = cheerio.load(_html);
     const title = _$('h1 a').text();
-
+    const membersCount =
+      _html && _html.match(/Members \(\d+/)
+        ? parseInt(_html.match(/Members \(\d+/)[0].replace(/\D/g, ''), 10)
+        : '';
     const upcomingEventsCount =
       $('.groupHome-eventsList-upcomingEvents .eventCard--link').length + 1;
     const pastEventsCount =
@@ -58,10 +61,10 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     const description = `${descriptionArr.slice(0, maxLen).join(' ')}${
       descriptionArr.length > maxLen ? '...' : ''
     }`;
-    // const mostRecentPastEvent = $('.groupHome-eventsList-pastEvents time .eventTimeDisplay-startDate span').text()
-    // console.log('mostRecentPastEvent:', mostRecentPastEvent);
+
     res.push({
       title,
+      'Total Members': membersCount,
       'Upcoming Events': upcomingEventsCount,
       'Past Events': pastEventsCount,
       description,
