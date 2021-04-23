@@ -68,8 +68,14 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       mostRecentPastEvent = pastEventsArr[0].firstChild.data;
     }
 
-    const upcomingEventsArr = _$('.groupHome-eventsList-upcomingEvents .eventTimeDisplay-startDate span',);
-    if (upcomingEventsArr && upcomingEventsArr[0] && upcomingEventsArr[0].firstChild) {
+    const upcomingEventsArr = _$(
+      '.groupHome-eventsList-upcomingEvents .eventTimeDisplay-startDate span',
+    );
+    if (
+      upcomingEventsArr &&
+      upcomingEventsArr[0] &&
+      upcomingEventsArr[0].firstChild
+    ) {
       soonestUpcomingEvent = upcomingEventsArr[0].firstChild.data;
     }
 
