@@ -2,6 +2,7 @@ require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const path = require('path');
+const prettier = require('prettier');
 const { writeFile } = require('fs').promises;
 
 const [, , query, maxResults = 5] = process.argv;
@@ -98,7 +99,12 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   const fileName = `${filePath}/${query}.json`;
 
-  await writeFile(fileName, JSON.stringify(res));
+  const prettifiedRes = prettier.format(JSON.stringify(res), {
+    parser: 'json',
+  });
+
+  await writeFile(fileName, prettifiedRes);
+
   //eslint-disable-next-line no-console
   console.info(`Successfully created ${fileName}.`);
 })();
