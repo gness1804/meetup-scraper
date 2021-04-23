@@ -35,6 +35,8 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     linksArr.push(href);
   });
 
+  // TODO: handle case with no links
+
   for (const link of linksArr.slice(0, maxResults)) {
     let _html;
     try {
@@ -86,20 +88,35 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       descriptionArr.length > maxLen ? '...' : ''
     }`;
 
+    if (!title) {
+      res.push(null);
+      continue;
+    }
+
     res.push({
       title,
-      'Total Members': membersCount,
-      'Upcoming Events Displayed': upcomingEventsDisplayedCount,
-      'Past Events Displayed': pastEventsDisplayedCount,
+      'Total Members': membersCount || 'Not Listed',
+      'Upcoming Events Displayed': upcomingEventsDisplayedCount || 'Not Listed',
+      'Past Events Displayed': pastEventsDisplayedCount || 'Not Listed',
       'Most Recent Past Event': mostRecentPastEvent || 'Not Listed',
       'Soonest Upcoming Event': soonestUpcomingEvent || 'Not Listed',
-      description,
+      description: description || 'Not Listed',
     });
   }
 
+  const resolvedRes = res.filter((x) => x);
+
   const fileName = `${filePath}/${query}.json`;
 
-  const prettifiedRes = prettier.format(JSON.stringify(res), {
+  if (!resolvedRes.length) {
+    /* eslint-disable-next-line no-console */
+    console.info(
+      `Your query for ${query} did not return any results. Please try again with another query.`,
+    );
+    process.exit(0);
+  }
+
+  const prettifiedRes = prettier.format(JSON.stringify(resolvedRes), {
     parser: 'json',
   });
 
