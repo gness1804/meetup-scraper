@@ -59,13 +59,18 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     ).length;
 
     let mostRecentPastEvent = null;
+    let soonestUpcomingEvent = null;
 
     const pastEventsArr = _$(
       '.groupHome-eventsList-pastEvents .eventTimeDisplay-startDate span',
     );
-
     if (pastEventsArr && pastEventsArr[0] && pastEventsArr[0].firstChild) {
       mostRecentPastEvent = pastEventsArr[0].firstChild.data;
+    }
+
+    const upcomingEventsArr = _$('.groupHome-eventsList-upcomingEvents .eventTimeDisplay-startDate span',);
+    if (upcomingEventsArr && upcomingEventsArr[0] && upcomingEventsArr[0].firstChild) {
+      soonestUpcomingEvent = upcomingEventsArr[0].firstChild.data;
     }
 
     const descriptionArr = _$('.group-description').text().split(' ');
@@ -80,6 +85,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       'Upcoming Events Displayed': upcomingEventsDisplayedCount,
       'Past Events Displayed': pastEventsDisplayedCount,
       'Most Recent Past Event': mostRecentPastEvent || 'Not Listed',
+      'Soonest Upcoming Event': soonestUpcomingEvent || 'Not Listed',
       description,
     });
   }
