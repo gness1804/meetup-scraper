@@ -51,10 +51,12 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       _html && _html.match(/Members \(\d+/)
         ? parseInt(_html.match(/Members \(\d+/)[0].replace(/\D/g, ''), 10)
         : '';
-    const upcomingEventsCount =
-      $('.groupHome-eventsList-upcomingEvents .eventCard--link').length + 1;
-    const pastEventsCount =
-      $('.groupHome-eventsList-pastEvents .eventCard--link').length + 1;
+    const upcomingEventsDisplayedCount = _$(
+      '.groupHome-eventsList-upcomingEvents .eventCard--link',
+    ).length;
+    const pastEventsDisplayedCount = _$(
+      '.groupHome-eventsList-pastEvents .eventCard--link',
+    ).length;
 
     let mostRecentPastEvent = null;
 
@@ -75,8 +77,8 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     res.push({
       title,
       'Total Members': membersCount,
-      'Upcoming Events': upcomingEventsCount,
-      'Past Events': pastEventsCount,
+      'Upcoming Events Displayed': upcomingEventsDisplayedCount,
+      'Past Events Displayed': pastEventsDisplayedCount,
       'Most Recent Past Event': mostRecentPastEvent || 'Not Listed',
       description,
     });
