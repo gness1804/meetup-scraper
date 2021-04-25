@@ -125,7 +125,8 @@ const extractFullDate = (dateStr) => {
       soonestUpcomingEvent = upcomingEventsArr[0].firstChild.data;
     }
 
-    // TODO: deal with soonestUpcomingEvent the same was as with mostRecentPastEvent above
+    if (soonestUpcomingEvent)
+      soonestUpcomingEvent = extractFullDate(soonestUpcomingEvent);
 
     const descriptionArr = _$('.group-description').text().split(' ');
     const maxLen = 150;
