@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const path = require('path');
 const prettier = require('prettier');
+const { extractDaysSince } = require('./utils/extractDaysSince');
 const { writeFile } = require('fs').promises;
 
 const [, , query, maxResults = 5] = process.argv;
@@ -49,7 +50,7 @@ const extractFullDate = (dateStr) => {
     // check if day of the week in dateVal matches dayOfWeek
     if (day === dayOfWeek) return `${dateStr}, 2020`;
     // date is not in either 2020 or 2021
-    return 'Before 2020';
+    return 'Not Recent';
   }
   return null;
 };
@@ -102,7 +103,9 @@ const extractFullDate = (dateStr) => {
     ).length;
 
     let mostRecentPastEvent = null;
+    let daysSinceMostRecentPastEvent = null;
     let soonestUpcomingEvent = null;
+    // let daysUntilSoonestUpcomingEvent = null;
 
     const pastEventsArr = _$(
       '.groupHome-eventsList-pastEvents .eventTimeDisplay-startDate span',
@@ -113,6 +116,10 @@ const extractFullDate = (dateStr) => {
 
     if (mostRecentPastEvent)
       mostRecentPastEvent = extractFullDate(mostRecentPastEvent);
+
+    if (mostRecentPastEvent && new Date(mostRecentPastEvent)) {
+      daysSinceMostRecentPastEvent = extractDaysSince(mostRecentPastEvent);
+    }
 
     const upcomingEventsArr = _$(
       '.groupHome-eventsList-upcomingEvents .eventTimeDisplay-startDate span',
@@ -145,6 +152,8 @@ const extractFullDate = (dateStr) => {
       'Upcoming Events Displayed': upcomingEventsDisplayedCount || 'Not Listed',
       'Past Events Displayed': pastEventsDisplayedCount || 'Not Listed',
       'Most Recent Past Event': mostRecentPastEvent || 'Not Listed',
+      'Days Since Most Recent Past Event':
+        daysSinceMostRecentPastEvent || 'Not Available',
       'Soonest Upcoming Event': soonestUpcomingEvent || 'Not Listed',
       description: description || 'Not Listed',
     });

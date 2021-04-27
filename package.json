@@ -9,7 +9,8 @@
     "start": "node index.js",
     "lint": "eslint .",
     "prettier:check": "prettier --check .",
-    "prettier:write": "prettier --write ."
+    "prettier:write": "prettier --write .",
+    "test": "jest"
   },
   "pre-commit": [
     "lint",
@@ -22,5 +23,8 @@
     "node-fetch": "^2.6.1",
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   }
 }
