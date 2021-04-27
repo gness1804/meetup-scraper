@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 const path = require('path');
 const prettier = require('prettier');
 const { extractDaysSince } = require('./utils/extractDaysSince');
+const { extractFullDate } = require('./utils/extractFullDate');
 const { writeFile } = require('fs').promises;
 
 const [, , query, maxResults = 5] = process.argv;
@@ -14,46 +15,6 @@ if (!query)
 
 // TODO: make city and state dynamic via inputs
 const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&radius=50&userFreeform=Austin%2C+TX&mcId=z73301&mcName=Austin%2C+TX&sort=recommended&eventFilter=all`;
-
-const months = {
-  Jan: 1,
-  Feb: 2,
-  Mar: 3,
-  Apr: 4,
-  May: 5,
-  Jun: 6,
-  Jul: 7,
-  Aug: 8,
-  Sep: 9,
-  Oct: 10,
-  Nov: 11,
-  Dec: 12,
-};
-
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-const extractFullDate = (dateStr) => {
-  const [, dayOfWeek, month, date] = dateStr.match(
-    /^(\w{3}), ([A-Z][a-z]{2}) (\d{1,2})/,
-  );
-
-  const monthVal = `0${months[month]}`;
-  const dateVal = date.toString().length === 1 ? `0${date}` : date;
-
-  if (dayOfWeek && month && date) {
-    let day = days[new Date(`2021-${monthVal}-${dateVal}T00:00`).getDay()];
-    // check if day of the week in dateVal matches dayOfWeek
-    if (day === dayOfWeek) return `${dateStr}, 2021`;
-
-    // no matching date in 2021; check 2020
-    day = days[new Date(`2020-${monthVal}-${dateVal}T00:00`).getDay()];
-    // check if day of the week in dateVal matches dayOfWeek
-    if (day === dayOfWeek) return `${dateStr}, 2020`;
-    // date is not in either 2020 or 2021
-    return 'Not Recent';
-  }
-  return null;
-};
 
 (async () => {
   let html;
@@ -134,6 +95,8 @@ const extractFullDate = (dateStr) => {
 
     if (soonestUpcomingEvent)
       soonestUpcomingEvent = extractFullDate(soonestUpcomingEvent);
+
+    // TODO: add logic to get daysUntilSoonestUpcomingEvent
 
     const descriptionArr = _$('.group-description').text().split(' ');
     const maxLen = 150;
