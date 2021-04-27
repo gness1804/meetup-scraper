@@ -11,6 +11,7 @@ const extractDaysSince = (dateStr) => {
   const earlier = new Date(dateStr).getTime();
   if (isNaN(earlier)) return '';
   const ms = now - earlier;
+  if (ms < 0) return '';
   // compute total number of days
   return Math.floor(ms / 1000 / 60 / 60 / 24);
 };
