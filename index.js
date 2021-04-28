@@ -8,14 +8,13 @@ const { extractDaysTo } = require('./utils/extractDaysTo');
 const { extractFullDate } = require('./utils/extractFullDate');
 const { writeFile } = require('fs').promises;
 
-const [, , query, maxResults = 5] = process.argv;
+const [, , query, zip = '78758', maxResults = 5] = process.argv;
 const filePath = path.resolve(__dirname, './data');
 
 if (!query)
   throw new Error('Error: query argument required. Example: "tennis".');
 
-// TODO: make city and state dynamic via inputs
-const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&radius=50&userFreeform=Austin%2C+TX&mcId=z73301&mcName=Austin%2C+TX&sort=recommended&eventFilter=all`;
+const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&radius=50&userFreeform=${zip}`;
 
 (async () => {
   let html;
@@ -138,7 +137,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   const resolvedRes = res.filter((x) => x);
 
-  const fileName = `${filePath}/${query}.json`;
+  const fileName = `${filePath}/${query}-${zip}.json`;
 
   if (!resolvedRes.length) {
     /* eslint-disable-next-line no-console */
