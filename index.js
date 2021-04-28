@@ -19,6 +19,9 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
 (async () => {
   let html;
+  /* eslint-disable-next-line no-console */
+  console.info('Retrieving data from Meetup...');
+  const startTime = Date.now();
   try {
     const res = await fetch(url);
     html = await res.text();
@@ -147,4 +150,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   //eslint-disable-next-line no-console
   console.info(`Successfully created ${fileName}.`);
+  const endTime = Date.now() - startTime;
+  //eslint-disable-next-line no-console
+  console.info(`Data operation completed in ${endTime / 1000} seconds.`);
 })();
