@@ -142,6 +142,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
     res.push({
       title,
+      url: link,
       'Total Members': membersCount || 'Not Listed',
       'Upcoming Events Displayed': upcomingEventsDisplayedCount || 'Not Listed',
       'Past Events Displayed': pastEventsDisplayedCount || 'Not Listed',
