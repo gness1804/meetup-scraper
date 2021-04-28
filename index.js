@@ -41,7 +41,13 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     linksArr.push(href);
   });
 
-  // TODO: handle case with no links
+  if (!links.length) {
+    /* eslint-disable-next-line no-console */
+    console.info(
+      `Your query for ${query} did not return any results. Please try again with another query.`,
+    );
+    process.exit(0);
+  }
 
   for (const link of linksArr.slice(0, maxResults)) {
     let _html;
