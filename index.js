@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 const path = require('path');
 const prettier = require('prettier');
 const { extractDaysSince } = require('./utils/extractDaysSince');
+const { extractDaysTo } = require('./utils/extractDaysTo');
 const { extractFullDate } = require('./utils/extractFullDate');
 const { writeFile } = require('fs').promises;
 
@@ -66,7 +67,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     let mostRecentPastEvent = null;
     let daysSinceMostRecentPastEvent = null;
     let soonestUpcomingEvent = null;
-    // let daysUntilSoonestUpcomingEvent = null;
+    let daysUntilSoonestUpcomingEvent = null;
 
     const pastEventsArr = _$(
       '.groupHome-eventsList-pastEvents .eventTimeDisplay-startDate span',
@@ -96,7 +97,9 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     if (soonestUpcomingEvent)
       soonestUpcomingEvent = extractFullDate(soonestUpcomingEvent);
 
-    // TODO: add logic to get daysUntilSoonestUpcomingEvent
+    if (soonestUpcomingEvent && new Date(soonestUpcomingEvent)) {
+      daysUntilSoonestUpcomingEvent = extractDaysTo(soonestUpcomingEvent);
+    }
 
     const descriptionArr = _$('.group-description').text().split(' ');
     const maxLen = 150;
@@ -117,6 +120,8 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       'Most Recent Past Event': mostRecentPastEvent || 'Not Listed',
       'Days Since Most Recent Past Event':
         daysSinceMostRecentPastEvent || 'Not Available',
+      'Days Until Soonest Upcoming Event':
+        daysUntilSoonestUpcomingEvent || 'Not Available',
       'Soonest Upcoming Event': soonestUpcomingEvent || 'Not Listed',
       description: description || 'Not Listed',
     });
