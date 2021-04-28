@@ -16,11 +16,19 @@ if (process.argv.indexOf('--help') !== -1) {
       1. query: the search term. Example: "soccer".
       2. zip code: optional US zip code. Defaults to 78758.
       3. maxResults: the max results to generate. Defaults to 5.
+      4. sortOrder: order by which to sort results. Options: mostRecent | soonest | members | title. Default to mostRecent.
   `);
   process.exit(0);
 }
 
-const [, , query, zip = '78758', maxResults = 5] = process.argv;
+const [
+  ,
+  ,
+  query,
+  zip = '78758',
+  maxResults = 5,
+  // sortOrder = 'mostRecent',
+] = process.argv;
 const filePath = path.resolve(__dirname, './data');
 
 if (!query)
@@ -143,11 +151,22 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       'Days Until Soonest Upcoming Event':
         daysUntilSoonestUpcomingEvent || 'Not Available',
       'Soonest Upcoming Event': soonestUpcomingEvent || 'Not Listed',
-      description: description || 'Not Listed',
+      description: description.trim() || 'Not Listed',
     });
   }
 
-  const resolvedRes = res.filter((x) => x);
+  let resolvedRes = res.filter((x) => x);
+
+  // TODO: add function to sort according to sortOrder options above.
+  resolvedRes = resolvedRes.sort((a, b) => {
+    let mostRecentA = a['Days Since Most Recent Past Event'];
+    let mostRecentB = b['Days Since Most Recent Past Event'];
+
+    if (isNaN(mostRecentA)) mostRecentA = 10000;
+    if (isNaN(mostRecentB)) mostRecentB = 10000;
+
+    return mostRecentA - mostRecentB;
+  });
 
   const fileName = `${filePath}/${query}-${zip}.json`;
 
