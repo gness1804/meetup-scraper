@@ -8,6 +8,18 @@ const { extractDaysTo } = require('./utils/extractDaysTo');
 const { extractFullDate } = require('./utils/extractFullDate');
 const { writeFile } = require('fs').promises;
 
+if (process.argv.indexOf('--help') !== -1) {
+  //eslint-disable-next-line no-console
+  console.info(`
+    Retrieves Meetup data on a specific interest.
+    Arguments:
+      1. query: the search term. Example: "soccer".
+      2. zip code: optional US zip code. Defaults to 78758.
+      3. maxResults: the max results to generate. Defaults to 5.
+  `);
+  process.exit(0);
+}
+
 const [, , query, zip = '78758', maxResults = 5] = process.argv;
 const filePath = path.resolve(__dirname, './data');
 
