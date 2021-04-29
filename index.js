@@ -12,23 +12,31 @@ if (process.argv.indexOf('--help') !== -1) {
   //eslint-disable-next-line no-console
   console.info(`
     Retrieves Meetup data on a specific interest.
-    Arguments:
-      1. query: the search term. Example: "soccer".
-      2. zip code: optional US zip code. Defaults to 78758.
-      3. maxResults: the max results to generate. Defaults to 5.
-      4. sortOrder: order by which to sort results. Options: mostRecent | soonest | members | title. Default to mostRecent.
+    The possible options are (order agnostic):
+
+      -q [term]: the search term. Example: "-q soccer". Required.
+      -z [zip code]: any valid US zip code. Defaults to '78758'.
+      -m [number]: the max results to be found. Defaults to '5'.
+      -s [criterion]: sorting criterion. Available options: mostRecent | soonest | members | title. Default to "mostRecent".
   `);
   process.exit(0);
 }
 
-const [
-  ,
-  ,
-  query,
-  zip = '78758',
-  maxResults = 5,
-  // sortOrder = 'mostRecent',
-] = process.argv;
+const [, , ...args] = process.argv;
+let zip = '78758';
+let maxResults = '5';
+let sortingCriterion = 'mostRecent';
+
+let q = args.indexOf('-q');
+let z = args.indexOf('-z');
+let m = args.indexOf('-m');
+let s = args.indexOf('-s');
+
+const query = args[q + 1];
+if (z !== -1) zip = args[z + 1];
+if (m !== -1) maxResults = args[m + 1];
+if (s !== -1) sortingCriterion = args[s + 1];
+
 const filePath = path.resolve(__dirname, './data');
 
 if (!query)
@@ -68,7 +76,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     process.exit(0);
   }
 
-  for (const link of linksArr.slice(0, maxResults)) {
+  for (const link of linksArr.slice(0, parseInt(maxResults, 10))) {
     let _html;
     try {
       const res = await fetch(link);
@@ -156,18 +164,18 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     });
   }
 
-  let resolvedRes = res.filter((x) => x);
-
   // TODO: add function to sort according to sortOrder options above.
-  resolvedRes = resolvedRes.sort((a, b) => {
-    let mostRecentA = a['Days Since Most Recent Past Event'];
-    let mostRecentB = b['Days Since Most Recent Past Event'];
+  const resolvedRes = res
+    .filter((x) => x)
+    .sort((a, b) => {
+      let mostRecentA = a['Days Since Most Recent Past Event'];
+      let mostRecentB = b['Days Since Most Recent Past Event'];
 
-    if (isNaN(mostRecentA)) mostRecentA = 10000;
-    if (isNaN(mostRecentB)) mostRecentB = 10000;
+      if (isNaN(mostRecentA)) mostRecentA = 10000;
+      if (isNaN(mostRecentB)) mostRecentB = 10000;
 
-    return mostRecentA - mostRecentB;
-  });
+      return mostRecentA - mostRecentB;
+    });
 
   const fileName = `${filePath}/${query}-${zip}.json`;
 
