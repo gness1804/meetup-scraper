@@ -6,6 +6,7 @@ const prettier = require('prettier');
 const { extractDaysSince } = require('./utils/extractDaysSince');
 const { extractDaysTo } = require('./utils/extractDaysTo');
 const { extractFullDate } = require('./utils/extractFullDate');
+const { sorter } = require('./utils/sorter');
 const { writeFile } = require('fs').promises;
 
 if (process.argv.indexOf('--help') !== -1) {
@@ -164,18 +165,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     });
   }
 
-  // TODO: add function to sort according to sortOrder options above.
-  const resolvedRes = res
-    .filter((x) => x)
-    .sort((a, b) => {
-      let mostRecentA = a['Days Since Most Recent Past Event'];
-      let mostRecentB = b['Days Since Most Recent Past Event'];
-
-      if (isNaN(mostRecentA)) mostRecentA = 10000;
-      if (isNaN(mostRecentB)) mostRecentB = 10000;
-
-      return mostRecentA - mostRecentB;
-    });
+  const resolvedRes = sorter(res, sortingCriterion);
 
   const fileName = `${filePath}/${query}-${zip}.json`;
 
