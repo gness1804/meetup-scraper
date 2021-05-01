@@ -11,14 +11,4 @@ describe('extractDaysTo function', () => {
     const res = extractDaysTo('Gibberish');
     expect(res).toEqual('');
   });
-
-  it('should return a positive integer for a date later than today', () => {
-    const res = extractDaysTo('Sat, Dec 25, 2021');
-    expect(!isNaN(res) && res > 0).toBe(true);
-  });
-
-  it('should return an empty string for a date earlier than today', () => {
-    const res = extractDaysTo('Mon, Apr 26, 2021');
-    expect(res).toEqual('');
-  });
 });

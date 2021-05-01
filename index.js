@@ -145,6 +145,13 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       daysUntilSoonestUpcomingEvent = extractDaysTo(soonestUpcomingEvent);
     }
 
+    // handle case if soonest upcoming event is today
+    if (
+      daysUntilSoonestUpcomingEvent === -1 ||
+      daysUntilSoonestUpcomingEvent === 0
+    )
+      daysUntilSoonestUpcomingEvent = 'Today!';
+
     const descriptionArr = _$('.group-description').text().split(' ');
     const maxLen = 150;
     const description = `${descriptionArr.slice(0, maxLen).join(' ')}${

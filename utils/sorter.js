@@ -20,6 +20,10 @@ const sorter = (data, criterion) => {
           let soonestA = a['Days Until Soonest Upcoming Event'];
           let soonestB = b['Days Until Soonest Upcoming Event'];
 
+          // if the date is today, give it a very small number so it comes out on top. Multiple todays just tie.
+          if (soonestA === 'Today!') soonestA = 0.025;
+          if (soonestB === 'Today!') soonestB = 0.025;
+
           if (isNaN(soonestA)) soonestA = 10000;
           if (isNaN(soonestB)) soonestB = 10000;
 
