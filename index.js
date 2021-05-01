@@ -13,9 +13,11 @@ if (process.argv.indexOf('--help') !== -1) {
   //eslint-disable-next-line no-console
   console.info(`
     Retrieves Meetup data on a specific interest.
-    The possible options are (order agnostic):
+    The possible options are:
+      1. the search term. Example: "soccer". Required and must be first arg.
 
-      -q [term]: the search term. Example: "-q soccer". Required.
+      The following are optional and order agnostic:
+
       -z [zip code]: any valid US zip code. Defaults to '78758'.
       -m [number]: the max results to be found. Defaults to '5'.
       -s [criterion]: sorting criterion. Available options: mostRecent | soonest | members | title. Default to "mostRecent".
@@ -28,12 +30,11 @@ let zip = '78758';
 let maxResults = '5';
 let sortingCriterion = 'mostRecent';
 
-let q = args.indexOf('-q');
 let z = args.indexOf('-z');
 let m = args.indexOf('-m');
 let s = args.indexOf('-s');
 
-const query = args[q + 1];
+const query = args[0];
 if (z !== -1) zip = args[z + 1];
 if (m !== -1) maxResults = args[m + 1];
 if (s !== -1) sortingCriterion = args[s + 1];
