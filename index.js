@@ -95,7 +95,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     const title = _$('h1 a').text();
     const membersCount =
       _html && _html.match(/Members \(\d+/)
-        ? parseInt(_html.match(/Members \(\d+/)[0].replace(/\D/g, ''), 10)
+        ? parseInt(_html.match(/Members \(\d+,?\d+/)[0].replace(/\D/g, ''), 10)
         : '';
     const upcomingEventsDisplayedCount = _$(
       '.groupHome-eventsList-upcomingEvents .eventCard--link',
