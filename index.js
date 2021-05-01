@@ -123,6 +123,10 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
       daysSinceMostRecentPastEvent = extractDaysSince(mostRecentPastEvent);
     }
 
+    // handle case if today is the most recent past event
+    if (daysSinceMostRecentPastEvent === 0)
+      daysSinceMostRecentPastEvent = 'Today!';
+
     const upcomingEventsArr = _$(
       '.groupHome-eventsList-upcomingEvents .eventTimeDisplay-startDate span',
     );

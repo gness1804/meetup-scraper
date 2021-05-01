@@ -7,6 +7,10 @@ const sorter = (data, criterion) => {
           let mostRecentA = a['Days Since Most Recent Past Event'];
           let mostRecentB = b['Days Since Most Recent Past Event'];
 
+          // if the date is today, give it a very small number so it comes out on top. Multiple todays just tie.
+          if (mostRecentA === 'Today!') mostRecentA = 0.025;
+          if (mostRecentB === 'Today!') mostRecentB = 0.025;
+
           if (isNaN(mostRecentA)) mostRecentA = 10000;
           if (isNaN(mostRecentB)) mostRecentB = 10000;
 
