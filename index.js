@@ -21,6 +21,8 @@ if (process.argv.indexOf('--help') !== -1) {
       -z [zip code]: any valid US zip code. Defaults to '78758'.
       -m [number]: the max results to be found. Defaults to '5'.
       -s [criterion]: sorting criterion. Available options: mostRecent | soonest | members | title. Default to "mostRecent".
+
+      Additionally, passing "-p" as an argument prints out the resulting JSON data to standard output.
   `);
   process.exit(0);
 }
@@ -186,6 +188,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   //eslint-disable-next-line no-console
   console.info(`Successfully created ${fileName}.`);
+  if (args.indexOf('-p') !== '-1') process.stdout.write(`\n ${prettifiedRes} \n`);
   const endTime = Date.now() - startTime;
   //eslint-disable-next-line no-console
   console.info(`Data operation completed in ${endTime / 1000} seconds.`);
