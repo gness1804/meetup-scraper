@@ -188,7 +188,8 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   //eslint-disable-next-line no-console
   console.info(`Successfully created ${fileName}.`);
-  if (args.indexOf('-p') !== '-1') process.stdout.write(`\n ${prettifiedRes} \n`);
+  if (args.indexOf('-p') !== '-1')
+    process.stdout.write(`\n ${prettifiedRes} \n`);
   const endTime = Date.now() - startTime;
   //eslint-disable-next-line no-console
   console.info(`Data operation completed in ${endTime / 1000} seconds.`);
