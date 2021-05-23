@@ -3,7 +3,7 @@
 require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
-const path = require('path');
+// const path = require('path');
 const prettier = require('prettier');
 const { extractDaysSince } = require('./utils/extractDaysSince');
 const { extractDaysTo } = require('./utils/extractDaysTo');
@@ -43,7 +43,7 @@ if (z !== -1) zip = args[z + 1];
 if (m !== -1) maxResults = args[m + 1];
 if (s !== -1) sortingCriterion = args[s + 1];
 
-const filePath = path.resolve(__dirname, './data');
+// const filePath = path.resolve(__dirname, './data');
 
 if (!query)
   throw new Error('Error: query argument required. Example: "tennis".');
