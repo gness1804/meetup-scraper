@@ -2,9 +2,16 @@
   "name": "meetup-scraper",
   "version": "1.0.0",
   "description": "A scraper to find good Meetups.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gness1804/meetup-scraper.git"
+  },
   "main": "index.js",
   "author": "Graham Nessler",
   "license": "MIT",
+  "bin": {
+    "meetup-scraper": "index.js"
+  },
   "scripts": {
     "start": "node index.js",
     "lint": "eslint .",

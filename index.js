@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
@@ -7,13 +9,13 @@ const { extractDaysSince } = require('./utils/extractDaysSince');
 const { extractDaysTo } = require('./utils/extractDaysTo');
 const { extractFullDate } = require('./utils/extractFullDate');
 const { sorter } = require('./utils/sorter');
-const { writeFile } = require('fs').promises;
+// const { writeFile } = require('fs').promises;
 
 if (process.argv.indexOf('--help') !== -1) {
   //eslint-disable-next-line no-console
   console.info(`
     Retrieves Meetup data on a specific interest.
-    The possible options are:
+    The parameters are:
       1. the search term. Example: "soccer". Required and must be first arg.
 
       The following are optional and order agnostic:
@@ -22,7 +24,7 @@ if (process.argv.indexOf('--help') !== -1) {
       -m [number]: the max results to be found. Defaults to '5'.
       -s [criterion]: sorting criterion. Available options: mostRecent | soonest | members | title. Default to "mostRecent".
 
-      Additionally, passing "-p" as an argument prints out the resulting JSON data to standard output.
+      Example: 'meetup-scraper tennis -z 24060 -s mostRecent'
   `);
   process.exit(0);
 }
@@ -181,7 +183,7 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
 
   const resolvedRes = sorter(res, sortingCriterion);
 
-  const fileName = `${filePath}/${query}-${zip}.json`;
+  // const fileName = `${filePath}/${query}-${zip}.json`;
 
   if (!resolvedRes.length) {
     /* eslint-disable-next-line no-console */
@@ -195,11 +197,12 @@ const url = `https://www.meetup.com/find/?allMeetups=false&keywords=${query}&rad
     parser: 'json',
   });
 
-  await writeFile(fileName, prettifiedRes);
+  // TODO: re-add file write capabilities
+  // await writeFile(fileName, prettifiedRes);
 
   //eslint-disable-next-line no-console
-  console.info(`Successfully created ${fileName}.`);
-  if (args.indexOf('-p') !== -1) process.stdout.write(`\n ${prettifiedRes} \n`);
+  // console.info(`Successfully created ${fileName}.`);
+  process.stdout.write(`\n ${prettifiedRes} \n`);
 
   const endTime = Date.now() - startTime;
   //eslint-disable-next-line no-console
