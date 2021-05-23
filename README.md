@@ -2,8 +2,19 @@
 
 This is a tool to scrape the popular website meetup.com. Simply enter in an interest query (for instance, "soccer"), along with the optional parameters described below, and the program will retrieve several meetup groups in the chosen area with details such as total members, most recent past event, soonest current event, and a description.
 
+<br>
+
 ## Installation:
-`npm install meetup-scraper`
+
+```sh
+ # Install globally (recommended)
+npm install -g meetup-scraper
+
+# or using npx:
+npx meetup-scraper
+```
+
+<br>
 
 From the `--help` text:
 
@@ -20,12 +31,14 @@ From the `--help` text:
 
       Example: 'meetup-scraper tennis -z 24060 -s mostRecent'
 ```
+<br>
 
 An example query:
 `meetup-scraper tennis -z 24060 -s mostRecent`
 
 This would produce the following output:
-```
+
+```json
 [
   {
     "title": "Sun Hikers & Outdoor Enthusiasts",

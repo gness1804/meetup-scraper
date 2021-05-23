@@ -1,6 +1,6 @@
 {
   "name": "meetup-scraper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A scraper to find good Meetups.",
   "repository": {
     "type": "git",
